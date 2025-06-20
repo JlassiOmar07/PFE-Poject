@@ -1,0 +1,266 @@
+.button {
+  position: relative;
+  border-radius: 6px;
+  width: 150px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: 1px solid #cc0000;
+  background-color: #e50000;
+  overflow: hidden;
+}
+
+.button,
+.button__icon,
+.button__text {
+  transition: all 0.3s;
+}
+
+.button .button__text {
+  transform: translateX(35px);
+  color: #fff;
+  font-weight: 600;
+}
+
+.button .button__icon {
+  position: absolute;
+  transform: translateX(109px);
+  height: 100%;
+  width: 39px;
+  background-color: #cc0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button .svg {
+  width: 20px;
+}
+
+.button:hover {
+  background: #cc0000;
+}
+
+.button:hover .button__text {
+  color: transparent;
+}
+
+.button:hover .button__icon {
+  width: 148px;
+  transform: translateX(0);
+}
+
+.button:active .button__icon {
+  background-color: #b20000;
+}
+
+.button:active {
+  border: 1px solid #b20000;
+}
+
+
+
+
+.Btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100px;
+  height: 40px;
+  border: none;
+  padding: 0px 20px;
+  background-color: rgb(168, 38, 255);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px rgb(140, 32, 212);
+  transition-duration: .3s;
+}
+
+.svg1 {
+  width: 13px;
+  position: absolute;
+  right: 0;
+  margin-right: 20px;
+  fill: white;
+  transition-duration: .3s;
+}
+
+.Btn:hover {
+  color: transparent;
+}
+
+.Btn:hover svg {
+  right: 43%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  transition-duration: .3s;
+}
+
+.Btn:active {
+  transform: translate(3px , 3px);
+  transition-duration: .3s;
+  box-shadow: 2px 2px 0px rgb(140, 32, 212);
+}
+
+
+
+.button2 {
+  padding: 8.5px 15px;
+  border: 0;
+  border-radius: 100px;
+  background-color: #2ba8fb;
+  color: #ffffff;
+  font-weight: Bold;
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+}
+
+.button2:hover {
+  background-color: #6fc5ff;
+  box-shadow: 0 0 20px #6fc5ff50;
+  transform: scale(1.1);
+}
+
+.button2:active {
+  background-color: #3d94cf;
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+  box-shadow: none;
+  transform: scale(0.98);
+}
+
+/* Styles pour les boutons avec missions existantes */
+.button2.has-missions {
+  background-color: #ff9800;
+  border: 2px solid #f57c00;
+}
+
+.button2.has-missions:hover {
+  background-color: #ffb74d;
+  box-shadow: 0 0 20px #ff980050;
+}
+
+.button2.has-missions:active {
+  background-color: #f57c00;
+}
+
+/* Styles pour le badge de compteur */
+.badge {
+  font-size: 0.7em;
+  min-width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styles pour la liste des missions existantes */
+.alert-info {
+  border-left: 4px solid #17a2b8;
+}
+
+.alert-info ul li {
+  margin-bottom: 5px;
+}
+
+.alert-info ul li:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== MODAL MISSION STYLES ===== */
+
+/* Configuration du modal */
+#missionModal .modal-dialog {
+  max-width: 800px;
+}
+
+#missionModal .modal-body {
+  padding: 1.5rem;
+}
+
+/* Messages d'erreur et de chargement */
+#missionModal .alert {
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+#missionModal mat-spinner {
+  margin: 0 auto;
+}
+
+/* Champs de formulaire */
+#missionModal .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#missionModal .mat-mdc-form-field input,
+#missionModal .mat-mdc-form-field textarea {
+  width: 100%;
+}
+
+/* Stepper configuration */
+#missionModal .mat-stepper-horizontal {
+  margin-top: 1rem;
+}
+
+#missionModal .mat-step-header {
+  pointer-events: auto;
+}
+
+#missionModal .mat-step-content {
+  padding: 1.5rem 0;
+}
+
+#missionModal form,
+#missionModal mat-step {
+  width: 100%;
+}
+
+/* Boutons du stepper */
+#missionModal .mat-stepper-horizontal-line {
+  border-top-color: #e0e0e0;
+}
+
+#missionModal button[mat-button],
+#missionModal button[mat-raised-button] {
+  margin: 0.5rem 0.25rem;
+  min-width: 100px;
+}
+
+/* Récapitulatif */
+#missionModal .card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#missionModal .card-body p {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+#missionModal .card-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  #missionModal .modal-dialog {
+    max-width: 95%;
+    margin: 1rem;
+  }
+
+  #missionModal .mat-mdc-form-field {
+    min-width: 100%;
+  }
+
+  #missionModal .modal-body {
+    padding: 1rem;
+  }
+}

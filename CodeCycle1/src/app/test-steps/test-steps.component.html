@@ -1,0 +1,198 @@
+<!-- Conteneur centré pour le composant -->
+<div class="centered-container">
+  <div class="stepper-wrapper">
+    <mat-horizontal-stepper #stepper [linear]="true">
+  <mat-step *ngFor="let step of steps; let i = index"
+            [stepControl]="getStepControl(i)"
+            [completed]="isStepCompleted(i)"
+            [editable]="false"
+            [errorMessage]="getStepErrorMessage(i)">
+    <ng-template matStepLabel>
+      <mat-icon *ngIf="stepper.selectedIndex > i" color="primary">check_circle</mat-icon>
+      <mat-icon *ngIf="stepper.selectedIndex === i" color="accent">{{step.icon}}</mat-icon>
+      <mat-icon *ngIf="stepper.selectedIndex < i" color="disabled">{{step.icon}}</mat-icon>
+      <span class="step-label">{{ step.label }}</span>
+    </ng-template>
+
+    <!-- Contenu de l'étape -->
+    <div class="step-content">
+      <p>{{ step.content }}</p>
+
+      <!-- Dropdown pour sélectionner un projet (uniquement à l'étape 1) -->
+      <div *ngIf="i === 0" class="project-selection">
+        <form [formGroup]="firstFormGroup">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Sélectionner un projet</mat-label>
+            <mat-select [(ngModel)]="selectedProject"
+                        formControlName="selectedProject"
+                        (selectionChange)="onProjectSelected($event.value)">
+              <mat-option *ngFor="let project of availableProjects" [value]="project.name">
+                {{ project.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="firstFormGroup.get('selectedProject')?.hasError('required')">
+              Veuillez sélectionner un projet
+            </mat-error>
+          </mat-form-field>
+        </form>
+
+        <!-- Informations du projet et bouton d'ouverture (affichés uniquement après sélection) -->
+        <div *ngIf="selectedProject" class="mt-3">
+          <div class="project-info">
+            <h3>Projet sélectionné</h3>
+            <div class="project-path">
+              <mat-icon>folder</mat-icon>
+              <code>{{ defaultProjectPath }}</code>
+            </div>
+          </div>
+
+          <button mat-raised-button color="primary" (click)="openIdeWithProject()" [disabled]="isLoading" class="open-ide-button">
+            <mat-icon *ngIf="!isLoading">code</mat-icon>
+            <mat-icon *ngIf="isLoading" class="spinner">sync</mat-icon>
+            {{ isLoading ? 'Ouverture de l\'IDE...' : 'Ouvrir l\'IDE' }}
+          </button>
+
+          <p class="mt-2 text-muted small">
+            Cliquez sur ce bouton pour ouvrir l'IDE avec le projet sélectionné
+          </p>
+        </div>
+      </div>
+
+      <!-- Configuration du test Cucumber (étape 2) -->
+      <div *ngIf="i === 1" class="test-config-section">
+        <h3>Configuration du test Cucumber</h3>
+
+        <form [formGroup]="secondFormGroup">
+          <!-- Saisie du tag Cucumber -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Tag Cucumber</mat-label>
+            <input matInput [(ngModel)]="testSuite.tag"
+                   formControlName="tag"
+                   placeholder="Ex: @smoke, @regression, @api"
+                   (input)="onTestSuiteDataChange()">
+            <mat-hint>Le tag doit commencer par &#64; (sera ajouté automatiquement si omis)</mat-hint>
+            <mat-error *ngIf="secondFormGroup.get('tag')?.hasError('required')">
+              Veuillez saisir un tag Cucumber
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Saisie du nom du test -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nom du test</mat-label>
+            <input matInput [(ngModel)]="testSuite.name"
+                   formControlName="name"
+                   placeholder="Ex: Tests de régression - Sprint 12"
+                   (input)="onTestSuiteDataChange()">
+            <mat-hint>Nom descriptif pour identifier cette exécution</mat-hint>
+            <mat-error *ngIf="secondFormGroup.get('name')?.hasError('required')">
+              Veuillez saisir un nom pour le test
+            </mat-error>
+          </mat-form-field>
+        </form>
+
+        <!-- Informations utilisateur -->
+        <div class="user-info" *ngIf="testSuite.user">
+          <mat-icon>person</mat-icon>
+          <span>Exécution par: {{ testSuite.user.firstName }} {{ testSuite.user.lastName }} (ID: {{ testSuite.user.id }})</span>
+        </div>
+
+        <!-- Aperçu de la configuration -->
+        <div *ngIf="testSuite.tag && testSuite.name" class="config-preview">
+          <h4>Aperçu de la configuration :</h4>
+          <mat-card class="preview-card">
+            <mat-card-content>
+              <div class="preview-info">
+                <mat-icon>info</mat-icon>
+                <div>
+                  <p><strong>Tag :</strong> {{ testSuite.tag }}</p>
+                  <p><strong>Nom :</strong> {{ testSuite.name }}</p>
+                  <p><strong>Utilisateur :</strong> {{ testSuite.user.firstName }} {{ testSuite.user.lastName || 'Non défini' }}</p>
+                  <p><strong>Commande Maven :</strong> mvn clean test -Dcucumber.filter.tags={{ testSuite.tag }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+
+
+      <!-- Exécution et affichage des logs en temps réel (étape 3) -->
+      <div *ngIf="i === 2" class="test-execution-section">
+        <form [formGroup]="thirdFormGroup">
+          <h3>Exécution du test et logs en temps réel</h3>
+        </form>
+
+        <!-- Statut d'exécution -->
+        <div class="execution-status mb-3">
+          <mat-card class="status-card">
+            <mat-card-content>
+              <div class="status-info">
+                <mat-icon [class]="getExecutionStatusIcon()">{{ getExecutionStatusIcon() }}</mat-icon>
+                <div>
+                  <p><strong>Statut :</strong> {{ executionStatus }}</p>
+                  <p *ngIf="testSuite.tag && testSuite.name"><strong>Configuration :</strong> {{ testSuite.tag }} - {{ testSuite.name }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Affichage des logs en temps réel -->
+        <div *ngIf="isExecuting || executionLogs" class="logs-section">
+          <div class="mb-3">
+            <h6>
+              <mat-icon>description</mat-icon>
+              Logs d'exécution
+              <mat-icon *ngIf="isExecuting" class="spinner">sync</mat-icon>
+            </h6>
+            <pre class="bg-light p-3 rounded logs-container"
+                 style="max-height: 300px; overflow-y: auto; background-color: #f8f9fa; border: 1px solid #dee2e6;">{{ executionLogs || 'En attente du démarrage de l\'exécution...' }}</pre>
+          </div>
+        </div>
+
+        <!-- Message d'information -->
+        <div *ngIf="!isExecuting && !executionLogs" class="info-message">
+          <mat-card class="info-card">
+            <mat-card-content>
+              <div class="info-content">
+                <mat-icon color="primary">info</mat-icon>
+                <p>Cliquez sur "Exécuter le test" pour lancer l'exécution et voir les logs en temps réel.</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boutons de navigation - Approche simple avec directives Angular Material -->
+    <div class="step-buttons">
+      <!-- Bouton Précédent -->
+      <button mat-stroked-button color="warn"
+              matStepperPrevious
+              *ngIf="i > 0">
+        <mat-icon>arrow_back</mat-icon>
+        Précédent
+      </button>
+
+      <!-- Bouton Suivant -->
+      <button mat-flat-button color="primary"
+              matStepperNext
+              [disabled]="!isStepCompleted(i)"
+              *ngIf="i < steps.length - 1">
+        Suivant
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+
+      <!-- Bouton Terminer -->
+      <button mat-flat-button color="accent"
+              (click)="executeTests()"
+              *ngIf="i === steps.length - 1">
+        <mat-icon>check_circle</mat-icon>
+        Exécuter le test
+      </button>
+    </div>
+  </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</div>

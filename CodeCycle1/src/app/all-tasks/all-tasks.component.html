@@ -1,0 +1,118 @@
+<div class="container py-4">
+  <div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="fas fa-check-circle me-2 text-success"></i>
+        Missions Terminées
+      </h5>
+      <button class="btn btn-outline-primary btn-sm" (click)="refreshMissions()" title="Rafraîchir la liste">
+        <i class="fas fa-sync-alt me-1"></i>
+        Rafraîchir
+      </button>
+    </div>
+    <div class="card-body p-0">
+      @if (isLoading) {
+        <div class="text-center p-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+          </div>
+          <p class="mt-2">Chargement des missions terminées en cours...</p>
+        </div>
+      } @else if (errorMessage) {
+        <div class="text-center p-4">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Erreur</strong>
+            <p class="mb-0 mt-2">{{ errorMessage }}</p>
+            <button class="btn btn-outline-danger btn-sm mt-2" (click)="refreshMissions()">
+              <i class="fas fa-redo me-1"></i>Réessayer
+            </button>
+          </div>
+        </div>
+      } @else if (completedMissions.length === 0) {
+        <div class="text-center p-4">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Aucune mission terminée</strong>
+            <p class="mb-0 mt-2">Vous n'avez encore terminé aucune mission. Commencez par exécuter des tests dans l'espace de travail !</p>
+            <button class="btn btn-primary btn-sm mt-3" (click)="goToTestingWorkspace()">
+              <i class="fas fa-play me-1"></i>Aller à l'espace de test
+            </button>
+          </div>
+        </div>
+      } @else {
+        <table class="table table-striped">
+          <thead class="table-light">
+            <tr>
+              <th>
+                <!-- <i class="fas fa-hashtag me-1"></i> -->
+                ID
+              </th>
+              <th>
+                <i class="fas fa-file-alt me-1"></i>
+                Titre de la Mission
+              </th>
+              <th>
+                <i class="fas fa-align-left me-1"></i>
+                Description
+              </th>
+              <th>
+                <i class="fas fa-comment me-1"></i>
+                Commentaire
+              </th>
+              <th>
+                <i class="fas fa-check-circle me-1 text-success"></i>
+                Statut
+              </th>
+              <th>
+                <i class="fas fa-cogs me-1"></i>
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (mission of completedMissions; track mission.id) {
+              <tr>
+                <td>
+                  <span class="badge bg-primary">{{ mission.id }}</span>
+                </td>
+                <td>
+                  <strong>{{ mission.titre }}</strong>
+                </td>
+                <td>
+                  <span class="text-muted">
+                    {{ mission.description || 'Aucune description' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="text-secondary">
+                    {{ mission.commentaire || 'Aucun commentaire' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-success">
+                    <i class="fas fa-check me-1"></i>
+                    Terminée
+                  </span>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="viewTestDashboard(mission.id)"
+                    title="Voir le tableau de bord de test pour cette mission"
+                    [disabled]="isLoading">
+                    <i class="fas fa-chart-line me-1" *ngIf="!isLoading"></i>
+                    <span class="spinner-border spinner-border-sm me-1" role="status" *ngIf="isLoading">
+                      <span class="visually-hidden">Chargement...</span>
+                    </span>
+                    {{ isLoading ? 'Recherche...' : 'Détails' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+  </div>
+</div>

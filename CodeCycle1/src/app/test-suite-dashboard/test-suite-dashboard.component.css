@@ -1,0 +1,182 @@
+/* Styles pour le tableau de bord TestSuite */
+
+.card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  transition: width 0.6s ease;
+}
+
+.progress-bar:empty {
+  min-width: 0;
+}
+
+/* Animations pour les métriques */
+.card-body i {
+  transition: transform 0.3s ease;
+}
+
+.card:hover .card-body i {
+  transform: scale(1.1);
+}
+
+/* Styles pour les logs */
+pre {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border: 1px solid #dee2e6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .progress {
+    height: 25px !important;
+  }
+  
+  .progress-bar {
+    font-size: 0.75rem;
+  }
+}
+
+/* Couleurs personnalisées pour les statuts */
+.text-excellent {
+  color: #28a745 !important;
+}
+
+.text-acceptable {
+  color: #ffc107 !important;
+}
+
+.text-critical {
+  color: #dc3545 !important;
+}
+
+/* Animation de chargement */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Styles pour les badges */
+.badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+}
+
+/* Amélioration de la lisibilité des métriques */
+.card-body h3 {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-body .text-muted {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Styles pour le bouton retour */
+.btn-outline-secondary:hover {
+  transform: translateX(-2px);
+  transition: transform 0.2s ease;
+}
+
+/* Amélioration des icônes */
+.fa-3x {
+  margin-bottom: 0.5rem;
+}
+
+/* Styles pour la section des logs */
+.card-body pre {
+  background-color: #f8f9fa !important;
+  border-radius: 8px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Responsive pour les métriques */
+@media (max-width: 576px) {
+  .fa-3x {
+    font-size: 2rem !important;
+  }
+  
+  .card-body h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Styles pour le rapport Cucumber amélioré */
+.cucumber-report h1 {
+  color: #333;
+}
+
+.cucumber-report .feature, .cucumber-report .scenario {
+  background: white;
+  border-left: 6px solid #2c3e50;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.cucumber-report .scenario {
+  border-left-color: #2980b9;
+}
+
+.cucumber-report .step {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.cucumber-report .passed {
+  background-color: #d4edda;
+  border-left: 5px solid #28a745;
+}
+
+.cucumber-report .failed {
+  background-color: #f8d7da;
+  border-left: 5px solid #dc3545;
+}
+
+.cucumber-report .skipped {
+  background-color: #fff3cd;
+  border-left: 5px solid #ffc107;
+}
+
+.cucumber-report pre {
+  white-space: pre-wrap;
+  background: #eee;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+}

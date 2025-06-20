@@ -1,0 +1,138 @@
+/* ===== CONTENEUR PRINCIPAL ===== */
+.welcome-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===== CONTENU TEXTUEL ===== */
+.welcome-content {
+  padding: 2rem 0;
+}
+
+/* ===== IMAGES ===== */
+.welcome-image {
+  padding: 0;
+  margin: 0;
+}
+
+.welcome-image img {
+  display: block;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: auto;
+}
+
+.main-image {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.main-image:hover {
+  transform: scale(1.05);
+}
+
+.fallback-image {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border-radius: 15px;
+  padding: 3rem 2rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 123, 255, 0.3);
+}
+
+.placeholder-image {
+  text-align: center;
+}
+
+.placeholder-image i {
+  opacity: 0.8;
+}
+
+/* ===== ÉLÉMENTS DE FONCTIONNALITÉS ===== */
+.feature-item {
+  padding: 0.5rem 0;
+  transition: transform 0.2s ease;
+}
+
+.feature-item:hover {
+  transform: translateX(10px);
+}
+
+.feature-item i {
+  font-size: 1.2rem;
+}
+
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-content,
+.welcome-image {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.welcome-image {
+  animation-delay: 0.2s;
+}
+
+/* ===== BOOTSTRAP OVERRIDES ===== */
+.container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.row {
+  margin: 0 !important;
+  padding: 20px;
+}
+
+.col-lg-6 {
+  padding: 10px !important;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .welcome-content {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .display-4 {
+    font-size: 2rem;
+  }
+
+  .main-image {
+    padding: 15px;
+  }
+
+  .row {
+    padding: 10px;
+  }
+
+  .col-lg-6 {
+    padding: 5px !important;
+  }
+
+}

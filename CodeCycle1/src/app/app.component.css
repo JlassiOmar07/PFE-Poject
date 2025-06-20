@@ -1,0 +1,80 @@
+/* styles.css */
+.show-parent-active > .nav-link {
+  /* applique le style 'active' Bootstrap au <a> */
+  color: #fff;
+
+}
+
+/* Styles pour les avatars utilisateur */
+.user-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.user-avatar-large {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles pour le dropdown header */
+.dropdown-header {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.dropdown-header .fw-bold {
+  font-size: 0.95rem;
+  color: #495057;
+}
+
+.dropdown-header .text-muted {
+  font-size: 0.8rem;
+  color: #6c757d !important;
+}
+
+/* Animation pour les avatars */
+.user-avatar, .user-avatar-large {
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover, .user-avatar-large:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive design pour les avatars */
+@media (max-width: 768px) {
+  .user-avatar {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+
+  .user-avatar-large {
+    width: 35px;
+    height: 35px;
+    font-size: 12px;
+  }
+}

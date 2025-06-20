@@ -1,0 +1,218 @@
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.btn1 {
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 0;
+  background-color: rgb(202, 56, 255);
+  letter-spacing: 1.5px;
+  font-size: bold 15px;
+  transition: all 0.3s ease;
+  box-shadow: rgb(156, 32, 187) 0px 10px 0px 0px;
+  color: hsl(0, 0%, 100%);
+  cursor: pointer;
+  margin-bottom: 9px;
+}
+
+.btn1:hover {
+  box-shadow: rgb(201, 46, 187) 0px 7px 0px 0px;
+}
+
+.btn1:active {
+  background-color: rgb(255, 56, 255);
+  /*50, 168, 80*/
+  box-shadow: rgb(201, 46, 187) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 200ms;
+}
+
+.button {
+
+  justify-content: center;
+  align-items: center;
+  padding: 5px 7px 1px;
+  gap: 15px;
+  background-color: #007ACC;
+  outline: 3px #007ACC solid;
+  outline-offset: -3px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.button .text {
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  transition: 400ms;
+}
+
+
+.button:hover {
+  background-color: transparent;
+}
+
+.button:hover .text {
+  color: #007ACC;
+}
+
+.button1 {
+
+  justify-content: center;
+  align-items: center;
+  padding: 5px 7px 1px;
+  gap: 15px;
+  background-color: #007ACC;
+  outline: 3px #007ACC solid;
+  outline-offset: -3px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: 400ms;
+}
+
+.button1 .text {
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+  transition: 400ms;
+}
+
+
+.button1:hover {
+  background-color: transparent;
+}
+
+.button1:hover .text {
+  color: #007ACC;
+}
+
+
+
+/* .card {
+  --main-color: #000;
+  --bg-color: #8DD4EB;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 300px;
+  padding: 25px;
+  background: var(--bg-color);
+  border-radius: 20px;
+}
+
+.card__wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card___wrapper-acounts {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.card___wrapper-acounts > div:nth-child(2) {
+  position: absolute;
+  left: 25px;
+  z-index: -1;
+}
+
+.card___wrapper-acounts > div:nth-child(3) {
+  position: absolute;
+  left: 50px;
+  z-index: -2;
+}
+
+.card__score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background: var(--main-color);
+}
+
+.card__acounts {
+  width: 42px;
+  height: 42px;
+}
+
+.card__acounts svg {
+  width: 100%;
+  height: 100%;
+}
+
+.card__menu {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-color);
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.card__title {
+  margin-top: 50px;
+  font-weight: 900;
+  font-size: 25px;
+  color: var(--main-color);
+}
+
+.card__subtitle {
+  margin-top: 15px;
+  font-weight: 400;
+  font-size: 15px;
+  color: var(--main-color);
+}
+
+.card__indicator {
+  margin-top: 50px;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--main-color);
+}
+
+.card__progress progress {
+  width: 100%;
+  height: 4px;
+  border-radius: 100px;
+}
+
+.card__progress progress::-webkit-progress-bar {
+  background-color: #00000030;
+  border-radius: 100px;
+}
+
+.card__progress progress::-webkit-progress-value {
+  background-color: var(--main-color);
+  border-radius: 100px;
+}
+
+<div class="card__menu">
+            <svg fill="none" height="20" viewBox="0 0 4 20" width="4" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#000">
+                    <path d="m2 4c1.10457 0 2-.89543 2-2s-.89543-2-2-2-2 .89543-2 2 .89543 2 2 2z"></path>
+                    <path d="m2 12c1.10457 0 2-.8954 2-2 0-1.10457-.89543-2-2-2s-2 .89543-2 2c0 1.1046.89543 2 2 2z"></path>
+                    <path d="m2 20c1.10457 0 2-.8954 2-2s-.89543-2-2-2-2 .8954-2 2 .89543 2 2 2z"></path>
+                </g>
+            </svg>
+        </div>
+
+ */

@@ -1,0 +1,45 @@
+<div class="container py-4">
+    <div class="col-sm-4 col-md-4 col-lg-4"> 
+        <label>Roles</label> 
+        <select class="form-control form-control-lg" id="idRole" name="idRole" [(ngModel)]="idRole" (change)="onChange()"> 
+            @for(r of roles; track r.id){ 
+                <option [value]="r.id"> {{r.name}} </option> 
+            } 
+        </select> 
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <table  class="table table-striped">
+                
+                    <tr>
+                        <th>N°</th>
+                        <th>Id</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th hidden>Password</th>
+                        <th>Role</th>
+                    </tr>
+                
+                @for (usr of users; track usr.id ;let index =$index) {
+                <tbody>
+                    <tr>
+                        <td>{{index+1}}</td>
+                        <td>{{usr.id}}</td>
+                        <td>{{usr.email}}</td>
+                        <td>{{usr.firstName}}</td>
+                        <td>{{usr.lastName}}</td>
+                        <td hidden >{{usr.password}}</td>
+                        <td>
+                            <span *ngFor="let r of usr.roles; let i = index">
+                                {{ r.name }}<span *ngIf="i < usr.roles.length - 1">, </span>
+                            </span>
+                        </td>
+                        <!-- <td><a class="btn btn-danger" (click)="deleteUser(usr)">Delete</a></td>
+                        <td><a class="btn btn-success" [routerLink]="['/updateUser',usr.id]">Update</a></td> -->
+                    </tr>
+                </tbody>
+            }
+            </table>
+        </div>
+    </div>

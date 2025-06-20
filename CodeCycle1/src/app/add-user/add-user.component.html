@@ -1,0 +1,98 @@
+<div class="container py-4">
+    <div>
+        <h2>Add Member :</h2>
+    </div>
+
+    <!-- Message d'erreur global -->
+    <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="userForm" (ngSubmit)="addUser()">
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>User First Name *</label>
+            <input
+                type="text"
+                formControlName="firstName"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('firstName')">
+            <div *ngIf="isFieldInvalid('firstName')" class="invalid-feedback">
+                {{ getFieldError('firstName') }}
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <label>User Last Name *</label>
+            <input
+                type="text"
+                formControlName="lastName"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('lastName')">
+            <div *ngIf="isFieldInvalid('lastName')" class="invalid-feedback">
+                {{ getFieldError('lastName') }}
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>User Email *</label>
+            <input
+                type="email"
+                formControlName="email"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('email')">
+            <div *ngIf="isFieldInvalid('email')" class="invalid-feedback">
+                {{ getFieldError('email') }}
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <label>User Password *</label>
+            <input
+                type="password"
+                formControlName="password"
+                class="form-control"
+                [class.is-invalid]="isFieldInvalid('password')">
+            <div *ngIf="isFieldInvalid('password')" class="invalid-feedback">
+                {{ getFieldError('password') }}
+            </div>
+        </div>
+
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <label>Role *</label>
+            <select
+                formControlName="roleName"
+                class="form-control form-control-lg"
+                [class.is-invalid]="isFieldInvalid('roleName')">
+                <option value="">Sélectionner un rôle</option>
+                @for(r of roles; track r.id){
+                    <option [value]="r.name"> {{r.name}} </option>
+                }
+            </select>
+            <div *ngIf="isFieldInvalid('roleName')" class="invalid-feedback">
+                {{ getFieldError('roleName') }}
+            </div>
+        </div>
+        <div class="mt-2">
+            <button
+                type="submit"
+                class="button"
+                [disabled]="userForm.invalid || isSubmitting">
+                <span class="button__text">
+                    {{ isSubmitting ? 'Ajout en cours...' : 'Add' }}
+                </span>
+                <span class="button__icon" *ngIf="!isSubmitting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2"
+                        stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
+                        <line y2="19" y1="5" x2="12" x1="12"></line>
+                        <line y2="12" y1="12" x2="19" x1="5"></line>
+                    </svg>
+                </span>
+                <span class="button__icon" *ngIf="isSubmitting">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 11-6.219-8.56"/>
+                    </svg>
+                </span>
+            </button>
+        </div>
+    </form>
+</div>

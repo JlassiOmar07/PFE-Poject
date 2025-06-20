@@ -1,0 +1,67 @@
+<!-- <mat-stepper #stepper>
+  
+  <mat-step [stepControl]="firstFormGroup" errorMessage="ID Exigence is required.">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Etape 1</ng-template>
+      <mat-form-field>
+        <mat-label>Id Exigence</mat-label>
+        <input [(ngModel)]="newMission.idExigence" matInput placeholder="REQ0001" formControlName="firstCtrl" required >
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" errorMessage="Title is required.">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Etape 2</ng-template>
+      <mat-form-field>
+        <mat-label>Titre</mat-label>
+        <input [(ngModel)]="newMission.titre" matInput placeholder="Se connecter avec un utilisateur valide" formControlName="secondCtrl"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdFormGroup" errorMessage="Description is required.">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Etape 3</ng-template>
+      <mat-form-field>
+        <mat-label>Description</mat-label>
+        <input [(ngModel)]="newMission.description" matInput placeholder="En tant qu'utlisateur, je veux pouvoir me connecter à l'application afin d'acéder à mon compte." formControlName="thirdCtrl"
+               required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="fourthFormGroup" errorMessage="Commentaire is required.">
+    <form [formGroup]="fourthFormGroup">
+      <ng-template matStepLabel>Etape 4</ng-template>
+      <mat-form-field>
+        <mat-label>Commentaire</mat-label>
+        <input [(ngModel)]="newMission.commentaire" matInput placeholder="Exemple d'Exigence de référence" formControlName="fourthCtrl">
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button   (click)="onTransmettre()" data-bs-dismiss="modal"  (click)="stepper.reset()" >Transmettre au testeur</button>
+    </div>
+  </mat-step>
+</mat-stepper> -->

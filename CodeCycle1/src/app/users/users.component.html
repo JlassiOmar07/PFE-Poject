@@ -1,0 +1,325 @@
+<div class="container py-4">
+    <div class="card shadow mb-4">
+        <div class="card-body p-0">
+
+            @if (isLoading) {
+            <div class="text-center p-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Chargement...</span>
+                </div>
+                <p class="mt-2">Chargement des utilisateurs...</p>
+            </div>
+            } @else if (errorMessage) {
+            <div class="alert alert-danger m-3">
+                <i class="fas fa-exclamation-triangle"></i> {{errorMessage}}
+                <button class="btn btn-sm btn-outline-danger ms-2" (click)="chargerUsers()">
+                    Réessayer
+                </button>
+            </div>
+            } @else if (users.length === 0) {
+            <div class="alert alert-info m-3">
+                <i class="fas fa-info-circle"></i> Aucun utilisateur trouvé.
+            </div>
+            } @else {
+
+            <table class="table table-striped mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>N°</th>
+                            <th>Utilisateur</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th></th>
+                            <th>Actions</th>
+                            <th></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (usr of users; track usr.id; let index = $index) {
+
+                        <tr>
+                            <td>{{index + 1}}</td>
+                            <td>
+                                <strong>{{usr.firstName}} {{usr.lastName}}</strong>
+                                <br><small class="text-muted">ID: {{usr.id}}</small>
+                            </td>
+                            <td>{{usr.email}}</td>
+                            <td>
+                                <span *ngFor="let r of usr.roles; let i = index">
+                                    {{ r.name }}<span *ngIf="i < usr.roles.length - 1">, </span>
+                                </span>
+                            </td>
+                        @if (authService.isAdmin()) {
+                        <td>
+                            <button class="button" type="button" (click)="deleteUser(usr)">
+                                <span class="button__text">Delete</span>
+                                <span class="button__icon"><svg class="svg" height="512" viewBox="0 0 512 512"
+                                        width="512" xmlns="http://www.w3.org/2000/svg">
+                                        <title></title>
+                                        <path
+                                            d="M112,112l20,320c.95,18.49,14.4,32,32,32H348c17.67,0,30.87-13.51,32-32l20-320"
+                                            style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px">
+                                        </path>
+                                        <line
+                                            style="stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:32px"
+                                            x1="80" x2="432" y1="112" y2="112"></line>
+                                        <path d="M192,112V72h0a23.93,23.93,0,0,1,24-24h80a23.93,23.93,0,0,1,24,24h0v40"
+                                            style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px">
+                                        </path>
+                                        <line
+                                            style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                                            x1="256" x2="256" y1="176" y2="400"></line>
+                                        <line
+                                            style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                                            x1="184" x2="192" y1="176" y2="400"></line>
+                                        <line
+                                            style="fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"
+                                            x1="328" x2="320" y1="176" y2="400"></line>
+                                    </svg></span>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="Btn" [routerLink]="['/updateUser',usr.id]">Edit
+                                <svg class="svg1" viewBox="0 0 512 512">
+                                    <path
+                                        d="M410.3 231l11.3-11.3-33.9-33.9-62.1-62.1L291.7 89.8l-11.3 11.3-22.6 22.6L58.6 322.9c-10.4 10.4-18 23.3-22.2 37.4L1 480.7c-2.5 8.4-.2 17.5 6.1 23.7s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L387.7 253.7 410.3 231zM160 399.4l-9.1 22.7c-4 3.1-8.5 5.4-13.3 6.9L59.4 452l23-78.1c1.4-4.9 3.8-9.4 6.9-13.3l22.7-9.1v32c0 8.8 7.2 16 16 16h32zM362.7 18.7L348.3 33.2 325.7 55.8 314.3 67.1l33.9 33.9 62.1 62.1 33.9 33.9 11.3-11.3 22.6-22.6 14.5-14.5c25-25 25-65.5 0-90.5L453.3 18.7c-25-25-65.5-25-90.5 0zm-47.4 168l-144 144c-6.2 6.2-16.4 6.2-22.6 0s-6.2-16.4 0-22.6l144-144c6.2-6.2 16.4-6.2 22.6 0s6.2 16.4 0 22.6z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <div class="position-relative">
+                                @let missionInfo = getUserMissionInfo(usr.id);
+                                <button class="button2" [class.has-missions]="missionInfo.hasActiveMissions"
+                                    data-bs-toggle="modal" data-bs-target="#missionModal"
+                                    (click)="selectUserForMission(usr)" [title]="missionInfo.title">
+                                    + Mission
+                                </button>
+                                @if (missionInfo.hasActiveMissions) {
+                                <span
+                                    class="badge bg-danger text-white position-absolute top-0 start-100 translate-middle">
+                                    {{missionInfo.activeMissionsCount}}
+                                </span>
+                                } @else if (missionInfo.hasAnyMissions) {
+                                <span
+                                    class="badge bg-success text-white position-absolute top-0 start-100 translate-middle">
+                                    ✓
+                                </span>
+                                }
+                            </div>
+                        </td>
+                        }
+
+                        </tr>
+                        }
+                    </tbody>
+            </table>
+            }
+
+           
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajouter une mission -->
+<div class="modal fade" id="missionModal" tabindex="-1" aria-labelledby="missionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="missionModalLabel">
+                    @if (selectedUser) {
+                        Assign Mission to {{selectedUser.firstName}} {{selectedUser.lastName}}
+                    } @else {
+                        Assign Mission
+                    }
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Messages d'erreur pour le modal -->
+                @if (missionErrorMessage) {
+                <div class="alert alert-danger mb-3">
+                    <i class="fas fa-exclamation-triangle"></i> {{missionErrorMessage}}
+                </div>
+                }
+
+                <!-- Indicateur de chargement -->
+                @if (isSubmittingMission) {
+                <div class="text-center mb-3">
+                    <mat-spinner diameter="30"></mat-spinner>
+                    <p class="mt-2">Création de la mission en cours...</p>
+                </div>
+                }
+
+                @if (selectedUser) {
+                @let userMissions = getUserMissionInfo(selectedUser.id);
+                @if (userMissions.hasAnyMissions) {
+                <div class="alert alert-info mb-3">
+                    <h6><i class="fas fa-info-circle"></i> Missions existantes pour cet utilisateur :</h6>
+
+                    @if (userMissions.hasActiveMissions) {
+                    <div class="mb-2">
+                        <strong>Missions actives :</strong>
+                        <ul class="mb-1">
+                            @for (mission of userMissions.activeMissions; track mission.id) {
+                            <li>
+                                <strong>{{mission.idExigence}}</strong> - {{mission.titre}}
+                                <span class="badge bg-warning text-dark ms-2">En cours</span>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                    }
+
+                    @if (userMissions.completedMissions.length > 0) {
+                    <div>
+                        <strong>Missions terminées :</strong>
+                        <ul class="mb-0">
+                            @for (mission of userMissions.completedMissions; track mission.id) {
+                            <li>
+                                <strong>{{mission.idExigence}}</strong> - {{mission.titre}}
+                                <span class="badge bg-success ms-2">Terminée</span>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                    }
+                </div>
+                }
+                }
+
+                <mat-stepper #stepper [linear]="true">
+
+                    <mat-step [stepControl]="step1FormGroup">
+                        <form [formGroup]="step1FormGroup">
+                            <ng-template matStepLabel>ID Exigence</ng-template>
+                            <mat-form-field class="w-100">
+                                <mat-label>ID Exigence</mat-label>
+                                <input matInput placeholder="REQ0001" formControlName="idExigence" required>
+                                @if (step1FormGroup.get('idExigence')?.hasError('required')) {
+                                <mat-error>L'ID d'exigence est requis</mat-error>
+                                }
+                                @if (step1FormGroup.get('idExigence')?.hasError('minlength')) {
+                                <mat-error>L'ID doit contenir au moins 3 caractères</mat-error>
+                                }
+                            </mat-form-field>
+                            <div class="mt-3">
+                                <button mat-button matStepperNext [disabled]="!step1FormGroup.valid">Suivant</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="step2FormGroup">
+                        <form [formGroup]="step2FormGroup">
+                            <ng-template matStepLabel>Titre</ng-template>
+                            <mat-form-field class="w-100">
+                                <mat-label>Titre de la mission</mat-label>
+                                <input matInput placeholder="Se connecter avec un utilisateur valide" formControlName="titre" required>
+                                @if (step2FormGroup.get('titre')?.hasError('required')) {
+                                <mat-error>Le titre est requis</mat-error>
+                                }
+                                @if (step2FormGroup.get('titre')?.hasError('minlength')) {
+                                <mat-error>Le titre doit contenir au moins 5 caractères</mat-error>
+                                }
+                            </mat-form-field>
+                            <div class="mt-3">
+                                <button mat-button matStepperPrevious>Précédent</button>
+                                <button mat-button matStepperNext [disabled]="!step2FormGroup.valid" class="ms-2">Suivant</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="step3FormGroup">
+                        <form [formGroup]="step3FormGroup">
+                            <ng-template matStepLabel>Description</ng-template>
+                            <mat-form-field class="w-100">
+                                <mat-label>Description détaillée</mat-label>
+                                <textarea matInput rows="3"
+                                    placeholder="En tant qu'utilisateur, je veux pouvoir me connecter à l'application afin d'accéder à mon compte."
+                                    formControlName="description" required></textarea>
+                                @if (step3FormGroup.get('description')?.hasError('required')) {
+                                <mat-error>La description est requise</mat-error>
+                                }
+                                @if (step3FormGroup.get('description')?.hasError('minlength')) {
+                                <mat-error>La description doit contenir au moins 10 caractères</mat-error>
+                                }
+                            </mat-form-field>
+                            <div class="mt-3">
+                                <button mat-button matStepperPrevious>Précédent</button>
+                                <button mat-button matStepperNext [disabled]="!step3FormGroup.valid" class="ms-2">Suivant</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step [stepControl]="step4FormGroup">
+                        <form [formGroup]="step4FormGroup">
+                            <ng-template matStepLabel>Commentaire</ng-template>
+                            <mat-form-field class="w-100">
+                                <mat-label>Commentaire (optionnel)</mat-label>
+                                <textarea matInput rows="2"
+                                    placeholder="Exemple d'exigence de référence ou notes supplémentaires"
+                                    formControlName="commentaire"></textarea>
+                            </mat-form-field>
+                            <div class="mt-3">
+                                <button mat-button matStepperPrevious>Précédent</button>
+                                <button mat-button matStepperNext class="ms-2">Suivant</button>
+                            </div>
+                        </form>
+                    </mat-step>
+
+                    <mat-step>
+                        <ng-template matStepLabel>Confirmation</ng-template>
+                        <div class="text-center">
+                            <h5>Récapitulatif de la mission</h5>
+                            <div class="card mt-3">
+                                <div class="card-body text-start">
+                                    <p><strong>ID:</strong> {{step1FormGroup.get('idExigence')?.value}}</p>
+                                    <p><strong>Titre:</strong> {{step2FormGroup.get('titre')?.value}}</p>
+                                    <p><strong>Description:</strong> {{step3FormGroup.get('description')?.value}}</p>
+                                    @if (step4FormGroup.get('commentaire')?.value) {
+                                    <p><strong>Commentaire:</strong> {{step4FormGroup.get('commentaire')?.value}}</p>
+                                    }
+                                    @if (selectedUser) {
+                                    <p><strong>Assigné à:</strong> {{selectedUser.firstName}} {{selectedUser.lastName}}</p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button mat-button matStepperPrevious [disabled]="isSubmittingMission">Précédent</button>
+                                <button mat-raised-button color="primary" (click)="ajouterMission()"
+                                    [disabled]="isSubmittingMission || !validateAllForms()" class="ms-2">
+                                    @if (isSubmittingMission) {
+                                    <mat-spinner diameter="20" class="me-2"></mat-spinner>
+                                    }
+                                    Créer et assigner la mission
+                                </button>
+                            </div>
+                        </div>
+                    </mat-step>
+                </mat-stepper>
+
+                <!-- <app-liste-exigences
+                    [user]="selectedUser"
+                    (transmettre)="affecterMission($event)">>
+                </app-liste-exigences> -->
+
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                    (click)="resetMissionForm()" [disabled]="isSubmittingMission">
+                    Annuler
+                </button>
+                <small class="text-muted me-auto">
+                    @if (selectedUser) {
+                    Mission pour: <strong>{{selectedUser.firstName}} {{selectedUser.lastName}}</strong>
+                    }
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

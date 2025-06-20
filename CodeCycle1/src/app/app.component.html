@@ -1,0 +1,93 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="!isLoginPage">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/acceuil" routerLinkActive="active" >UIB - IT Team Management</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @if (authService.isAdmin()) {
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/users" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        </li>
+        
+        <li class="nav-item dropdown" routerLinkActive="show-parent-active"  [routerLinkActiveOptions]="{ exact: false }">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUsers" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" >
+            Members
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownUsers">
+            <li><a class="dropdown-item" routerLink="/add-user" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Add Member</a></li>
+            <li><a class="dropdown-item" routerLink="/rechercheParRole" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Search by Role</a></li>
+            <li><a class="dropdown-item" routerLink="/rechercheParNom" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">Search by Name</a></li>
+            <!-- <li><a class="dropdown-item" routerLink="/rechercheParNom" routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">List Members</a></li> -->
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/tasks"  routerLinkActive="active">Tasks</a>
+        </li>
+      }@else {
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/allTasks" routerLinkActive="active">Tasks</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/TestingWorkspace"  routerLinkActive="active">Test Workspace</a>
+        </li>
+      }
+      </ul>
+
+        <ul class="navbar-nav ms-auto m-2">
+        <!-- <li class="navbar-nav ms-auto m-2">
+          <span class="nav-item text-light me-3 d-none d-md-block" *ngIf="authService.isloggedIn">
+            <i class="fas fa-user-circle me-1"></i>
+            {{ authService.getDisplayName() }}
+          </span>
+        </li> -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            @if (authService.isloggedIn) {
+              <span class="user-avatar me-2">{{ authService.getUserInitials() }}</span>
+              @if (authService.isAdmin()) {
+                Team Leader
+              } @else {
+                Testeur
+              }
+            } @else {
+              <i class="fas fa-user-cog me-1"></i>
+              Connexion
+            }
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            @if(authService.isloggedIn) {
+              <!-- Informations utilisateur -->
+              <li class="dropdown-header">
+                <div class="d-flex align-items-center">
+                  <span class="user-avatar-large me-2">{{ authService.getUserInitials() }}</span>
+                  <div>
+                    <div class="fw-bold">{{ authService.getDisplayName() }}</div>
+                    <small class="text-muted">{{ authService.loggedUser }}</small>
+                  </div>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" routerLink="/acceuil"><i class="fas fa-home me-2"></i>Accueil</a></li>
+              <li><a class="dropdown-item" routerLink="/profile"><i class="fas fa-id-card me-2"></i>Mon profil</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="onLogout()" style="cursor: pointer;"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+            } @else {
+              <li><a class="dropdown-item" routerLink="/login"><i class="fas fa-sign-in-alt me-2"></i>Connexion</a></li>
+            }
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<router-outlet />

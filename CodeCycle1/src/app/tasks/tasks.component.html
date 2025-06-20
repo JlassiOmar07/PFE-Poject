@@ -1,0 +1,397 @@
+<div class="container py-4">
+  <!-- Messages de feedback globaux -->
+  @if (successMessage) {
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      {{ successMessage }}
+      <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Fermer"></button>
+    </div>
+  }
+
+  <div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <i class="fas fa-check-circle me-2 text-success"></i>
+        List of Tasks
+      </h5>
+
+      <!-- Bouton pour exécuter tous les tests -->
+      <button class="btn btn-success btn-sm me-2 shadow-sm"
+              (click)="executeAllTests()"
+              [disabled]="isLoading || isExecutingTests"
+              title="Exécuter tous les tests Cucumber"
+              style="border-radius: 15px; font-weight: 500; padding: 6px 12px;">
+        @if (isExecutingTests) {
+          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          Tests en cours...
+        } @else if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+          <i class="fas fa-rocket me-1"></i>
+          Exécuter tous les tests
+        } @else {
+          <i class="fas fa-rocket me-1"></i>
+          Exécuter tous les tests
+        }
+      </button>
+
+      <!-- Bouton pour voir le dernier test global -->
+      <button class="btn btn-primary btn-sm shadow-sm"
+              (click)="viewGlobalTestDashboard()"
+              [disabled]="isLoading || isExecutingTests"
+              title="Voir le dernier test global (sans tag, userId, missionId)"
+              style="border-radius: 15px; font-weight: 500; padding: 6px 12px;">
+        @if (isLoading) {
+          <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+        }
+        <i class="fas fa-chart-bar me-1"></i>
+        Dernier Test Global
+      </button>
+
+    </div>
+    <div class="card-body p-0">
+      @if (isExecutingTests) {
+        <div class="text-center p-5">
+          <div class="d-flex flex-column align-items-center">
+            <div class="spinner-border text-success mb-3" role="status" style="width: 3rem; height: 3rem;">
+              <span class="visually-hidden">Exécution des tests...</span>
+            </div>
+            <h5 class="text-success mb-2">
+              <i class="fas fa-rocket me-2"></i>Exécution des tests en cours
+            </h5>
+            <p class="text-muted mb-3">{{ testExecutionMessage }}</p>
+            <div class="progress" style="width: 300px; height: 8px;">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                   role="progressbar" style="width: 100%"></div>
+            </div>
+            <small class="text-muted mt-2">
+              <i class="fas fa-info-circle me-1"></i>
+              Veuillez patienter pendant l'exécution et la génération du rapport...
+            </small>
+          </div>
+        </div>
+      } @else if (isLoading) {
+        <div class="text-center p-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Chargement...</span>
+          </div>
+          <p class="mt-2">Chargement des tâches en cours...</p>
+        </div>
+      } @else if (errorMessage) {
+        <div class="text-center p-4">
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Erreur</strong>
+            <p class="mb-0 mt-2">{{ errorMessage }}</p>
+            <button class="btn btn-outline-danger btn-sm mt-2" (click)="refreshMissions()">
+              <i class="fas fa-redo me-1"></i>Réessayer
+            </button>
+          </div>
+        </div>
+      } @else if (tasks.length === 0) {
+        <div class="text-center p-4">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Aucune tâche trouvée</strong>
+            <p class="mb-0 mt-2">Aucune tâche n'est disponible pour le moment.</p>
+          </div>
+        </div>
+      } @else {
+      <table class="table table-striped">
+        <thead class="table-light">
+          <tr>
+            <th><!-- <i class="fas fa-hashtag me-1"></i> -->ID</th>
+            <th><i class="fas fa-file-alt me-1"></i>Requirement ID</th>
+            <th><i class="fas fa-align-left me-1"></i>Title</th>
+            <th><i class="fas fa-comment me-1"></i>Description</th>
+            <th><i class="fas fa-check-circle me-1 text-success"></i>Comment</th>
+            <th><i class="fas fa-check-circle me-1 text-success"></i>Project Status</th>
+            <th><i class="fas fa-cogs me-1"></i>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of tasks; track task.id ;let index =$index) {
+          <tr>
+            <td><span class="badge bg-primary">{{ task.id }}</span></td>
+            <td><strong>{{task.idExigence}}</strong></td>
+            <td><span class="text-muted">{{ task.titre }}</span></td>
+            <td><span class="text-secondary">{{ task.description }}</span></td>
+            <td><span class="text-secondary">{{ task.commentaire }}</span></td>
+            <td>
+              <button class="button" data-bs-toggle="modal" data-bs-target="#viewTaskModal" (click)="selectUsersMissions(task)">
+                <span class="text">View Progress</span>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-outline-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#addUserModal" (click)="selectTaskForUserAssignment(task)" title="Assigner un utilisateur">
+                <i class="fas fa-user-plus"></i> Add User
+              </button>
+              <button class="btn btn-outline-success btn-sm me-2" data-bs-toggle="modal" data-bs-target="#updateTaskModal" (click)="updateTask(task)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="deleteTask(task)">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Modal de task traking  -->
+<div class="modal fade" id="viewTaskModal" tabindex="-1" aria-labelledby="viewTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewTaskModalLabel">
+                    Requirement {{ selectedTask?.idExigence }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            <div class="modal-body">
+                @if (isLoading) {
+                    <div class="text-center p-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement des utilisateurs...</span>
+                        </div>
+                        <p class="mt-2">Chargement des utilisateurs disponibles...</p>
+                    </div>
+                } @else if (errorMessage) {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ errorMessage }}
+                        <button class="btn btn-outline-danger btn-sm mt-2 d-block" (click)="selectedTask && loadUsersWithTask(selectedTask.id)">
+                            <i class="fas fa-redo me-1"></i>Réessayer
+                        </button>
+                    </div>
+                } @else if (users.length === 0) {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Aucun utilisateur disponible</strong>
+                        <p class="mb-0 mt-2">Aucun utilisateur n'est actuellement assigné à cette mission.</p>
+                    </div>
+                } @else {
+                    <div class="mb-3">
+                        <label class="form-label">Sélectionnez un utilisateur à assigner :</label>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Rôle</th>
+                                        <th>Task Traking</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (user of users; track user.id ;let index =$index) {
+                                        <tr>
+                                            <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>
+                                                <span class="badge bg-secondary">
+                                                    {{ user.roles && user.roles.length > 0 ? user.roles[0].name : 'Aucun rôle' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                        (click)="selectUser(user)"
+                                                        data-bs-dismiss="modal"
+                                                        [disabled]="isLoading">
+                                                    @if (isLoading) {
+                                                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                                    }
+                                                    <i class="fas fa-check me-1"></i>Project Overview
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                   }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de modification de tâche -->
+<div class="modal fade" id="updateTaskModal" tabindex="-1" aria-labelledby="updateTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateTaskModalLabel">Modifier la Mission</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+        <div class="modal-body">
+            <!-- Messages de feedback -->
+            @if (successMessage) {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    {{ successMessage }}
+                    <button type="button" class="btn-close" (click)="successMessage = ''" aria-label="Fermer"></button>
+                </div>
+            }
+            @if (errorMessage) {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ errorMessage }}
+                    <button type="button" class="btn-close" (click)="errorMessage = ''" aria-label="Fermer"></button>
+                </div>
+            }
+
+            <form [formGroup]="updateTaskFormGroup" class="row g-3">
+                <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                        <mat-label>ID Exigence</mat-label>
+                        <input matInput placeholder="REQ0001" formControlName="idExigence" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-6">
+                    <mat-form-field class="w-100">
+                        <mat-label>Titre</mat-label>
+                        <input matInput placeholder="Se connecter avec un utilisateur valide" formControlName="titre" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12">
+                    <mat-form-field class="w-100">
+                        <mat-label>Description</mat-label>
+                        <textarea matInput placeholder="En tant qu'utilisateur, je veux pouvoir me connecter à l'application afin d'accéder à mon compte."
+                                  formControlName="description" required rows="3"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-12">
+                    <mat-form-field class="w-100">
+                        <mat-label>Commentaire</mat-label>
+                        <textarea matInput placeholder="Exemple d'Exigence de référence"
+                                  formControlName="commentaire" rows="2"></textarea>
+                    </mat-form-field>
+                </div>
+            </form>
+        </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                        (click)="saveUpdatedTask()"
+                        [disabled]="updateTaskFormGroup.invalid || isLoading">
+                    @if (isLoading) {
+                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                    }
+                    Modifier la Tâche
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour assigner un utilisateur à une tâche -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserModalLabel">
+                    Assigner un utilisateur à la mission: {{ selectedTaskForAssignment?.idExigence }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+
+            <div class="modal-body">
+                @if (isLoadingUsers) {
+                    <div class="text-center p-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Chargement des utilisateurs...</span>
+                        </div>
+                        <p class="mt-2">Chargement des utilisateurs disponibles...</p>
+                    </div>
+                } @else if (errorMessage) {
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        {{ errorMessage }}
+                        <button class="btn btn-outline-danger btn-sm mt-2 d-block" (click)="loadAllUsers()">
+                            <i class="fas fa-redo me-1"></i>Réessayer
+                        </button>
+                    </div>
+                } @else if (allUsers.length === 0) {
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Aucun utilisateur disponible</strong>
+                        <p class="mb-0 mt-2">Aucun utilisateur n'est disponible pour l'assignation.</p>
+                    </div>
+                } @else {
+                    <div class="mb-3">
+                        <label class="form-label">Sélectionnez un utilisateur à assigner :</label>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Email</th>
+                                        <th>Rôle</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (user of allUsers; track user.id) {
+                                        <tr>
+                                            <td>{{ user.firstName }} {{ user.lastName }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>
+                                                <span class="badge bg-secondary">
+                                                    {{ user.roles && user.roles.length > 0 ? user.roles[0].name : 'Aucun rôle' }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                        (click)="assignUserToTask(user)"
+                                                        data-bs-dismiss="modal"
+                                                        [disabled]="isLoading">
+                                                    @if (isLoading) {
+                                                        <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+                                                    }
+                                                    <i class="fas fa-check me-1"></i>Assigner
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--
+
+
+
+
+-->
+

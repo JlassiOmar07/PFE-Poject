@@ -1,0 +1,50 @@
+
+
+<!-- <div class="login-wrapper">
+  <div class="login-card">
+    <h3>Connexion</h3>
+    <div class="form-group">
+      <label for="username">Nom Utilisateur :</label>
+      <input id="username" type="text" [(ngModel)]="user.email"
+             name="username" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label for="password">Mot de passe :</label>
+      <input id="password" type="password" [(ngModel)]="user.password"
+             name="password" class="form-control" />
+    </div>
+    <button class="btn-login" (click)="onLoggedin()">Connexion</button>
+  </div>
+</div> -->
+
+<div class="form-container">
+	<p class="title">Login</p>
+	<form class="form">
+		<!-- Message d'erreur -->
+		<div *ngIf="err === 1" class="error-message">
+			<i class="error-icon">⚠️</i>
+			<span>{{ errorMessage }}</span>
+		</div>
+
+		<div class="input-group">
+			<label for="username">Username</label>
+			<input type="text" name="username" id="username" [(ngModel)]="user.email"
+				   [class.error-input]="err === 1" [disabled]="isLoading">
+		</div>
+		<div class="input-group">
+			<label for="password">Password</label>
+			<input type="password" name="password" id="password" [(ngModel)]="user.password"
+				   [class.error-input]="err === 1" [disabled]="isLoading">
+		</div>
+    <div class="forgot">
+				<a rel="noopener noreferrer" href="#">Forgot Password ?</a>
+			</div>
+		<button class="sign" (click)="onLoggedin()" [disabled]="isLoading">
+			<span *ngIf="!isLoading">Sign in</span>
+			<span *ngIf="isLoading" class="loading-text">
+				<i class="loading-spinner">⏳</i> Connexion...
+			</span>
+		</button>
+	</form>
+
+</div>
